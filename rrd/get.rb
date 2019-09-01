@@ -16,7 +16,7 @@
 #
 require 'net/http'
 
-SERVER = "YOUR-SERVER-HERE"
+SERVER = "http://nodemcu-ip-address/"
 RRDPATH = "PATH-TO-GENERATED-RRDS"
 RRDTOOL = "/usr/bin/rrdtool"
 
