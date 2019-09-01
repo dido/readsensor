@@ -35,9 +35,9 @@ It requires only a few parts, total price was less than US$20.
 Here's a rather ugly schematic produced by Fritzing for it, should illustrate how everything comes together though.
 
 ![ReadSensor
- Board](https://raw.githubusercontent.com/dido/readsensor/master/readme-images/readsensor_schem.svg)
+ Schematic](https://raw.githubusercontent.com/dido/readsensor/master/readme-images/readsensor_schem.jpg)
 
 A breadboard illustration from Fritzing might be more illustrative.
 
 ![ReadSensor
- Board](https://raw.githubusercontent.com/dido/readsensor/master/readme-images/readsensor_bb.svg)
+ Fritzing Board](https://raw.githubusercontent.com/dido/readsensor/master/readme-images/readsensor_bb.jpg)
