@@ -60,10 +60,10 @@ volatile int readsensor = 0;
 float temp=NAN, hum=NAN, hidx=NAN, atm=NAN, alt=NAN;
 /* Start time of last one-second cycle */
 unsigned long starttm;
-/* Reset the system when this countdown reaches 0. This is set to about three hours,
-   18 minutes, and 3 seconds, a random time to make it unlikely a reset occurs during one
+/* Reset the system when this countdown reaches 0. This is set to about
+   42 minutes, and 52 seconds, a random time to make it unlikely a reset occurs during one
    of the times that the client tries to retrieve sensor data. */
-unsigned long count_zero = 10998;
+unsigned long count_zero = 2572;
 
 #define USE_WEBSERVER
 
