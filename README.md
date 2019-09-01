@@ -32,7 +32,8 @@ It requires only a few parts, total price was less than US$20.
 * 2 4.7kΩ resistor for I²C pullup
 * 1 10kΩ resistor for DHT11 pullup
 
-Here's a rather ugly schematic produced by Fritzing for it, should illustrate how everything comes together though.
+Here's a rather ugly schematic produced by Fritzing for it, should
+illustrate how everything comes together though.
 
 ![ReadSensor
  Schematic](https://raw.githubusercontent.com/dido/readsensor/master/readme-images/readsensor_schem.jpg)
@@ -41,3 +42,17 @@ A breadboard illustration from Fritzing might be more illustrative.
 
 ![ReadSensor
  Fritzing Board](https://raw.githubusercontent.com/dido/readsensor/master/readme-images/readsensor_bb.jpg)
+
+# Firmware
+
+The firmware is in the readsensor.ino Arduino sketch. You'll need to
+create an ssid.h file containing your network credentials, sort of
+like this:
+```c
+#ifndef STASSID
+#define STASSID "YOUR-SSID"
+#define STAPSK  "YOUR-PRESHARED-KEY"
+#endif
+```
+so that the NodeMCU knows how to connect to your WiFi network.
+
