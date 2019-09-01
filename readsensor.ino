@@ -1,4 +1,5 @@
-/* Networked Sensors on a NodeMCU 1.0 ESP8266 Microcontroller
+/*  -*- c++ -*-
+    Networked Sensors on a NodeMCU 1.0 ESP8266 Microcontroller
 
    Copyright © 2019 Rafael R. Sevilla
 
@@ -48,14 +49,21 @@ Adafruit_LiquidCrystal lcd(0);
 #endif
 
 #define DHTPIN 2          // Digital pin connected to sensor
-#define DHTTYPE DHT11   // DHT 11
+#define DHTTYPE DHT11     // DHT 11
 
 DHT dht(DHTPIN, DHTTYPE);
 Adafruit_BMP085 bmp;
 
+/* Read the sensor in this many seconds */
 volatile int readsensor = 0;
+/* Current values of the sensor */
 float temp=NAN, hum=NAN, hidx=NAN, atm=NAN, alt=NAN;
+/* Start time of last one-second cycle */
 unsigned long starttm;
+/* Reset the system when this countdown reaches 0. This is set to about three hours,
+   18 minutes, and 3 seconds, a random time to make it unlikely a reset occurs during one
+   of the times that the client tries to retrieve sensor data. */
+unsigned long count_zero = 10998;
 
 #define USE_WEBSERVER
 
@@ -65,10 +73,9 @@ unsigned long starttm;
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 
-#ifndef STASSID
-#define STASSID "YOUR-SSID"
-#define STAPSK  "YOUR-PSK"
-#endif
+/* CREATE THIS FILE WITH YOUR WIFI SSID and pre-shared key, define STASSID and STAPSK
+   inside that file appropriately. */
+#include "ssid.h"
 
 const char* ssid = STASSID;
 const char* password = STAPSK;
@@ -90,7 +97,7 @@ void setup_net(void) {
   display.clearDisplay();
   display.setTextSize(1);      // Normal 1:1 pixel scale
   display.setCursor(0,0);
-  display.print("Connecting to: ");
+  display.print("Connecting:");
   display.print(ssid);
   display.display();
   while (WiFi.status() != WL_CONNECTED) {
@@ -99,14 +106,14 @@ void setup_net(void) {
     display.display();
   }
   display.println("connected.");
-  display.print("IP address: ");
+  display.print("IP:");
   display.println(WiFi.localIP());
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
   server.begin();
   display.print("HTTP server started");
   display.display();
-  delay(5000);
+  delay(2000);
 }
 
 #endif
@@ -116,15 +123,6 @@ void p2dig(int v)
 {
   if (v < 10) DISPLAY.print("0");
   DISPLAY.print(v);
-}
-
-const char *dow2String(uint8_t code)
-// Day of week to string. DOW 1=Sunday, 0 is undefined
-{
-  static const char *str[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-  
-  if (code > 7) code = 0;
-  return(str[code]);
 }
 
 void read_sensors()
@@ -193,6 +191,7 @@ void printSensor(void)
   for (int i=0; i<readsensor; i++)
     display.print("\333");
   display.println("");
+  display.print(count_zero);
   display.display();
 }
 
@@ -272,6 +271,9 @@ void loop() {
     starttm = tm;
     if (brighttime > 0)
       brighttime--;
+    /* Reset the MCU after a certain amount of time */
+    if (count_zero-- <= 0)
+      ESP.restart();
   }
   display.dim(brighttime <= 0);
   if (digitalRead(0) == 0)
